@@ -31,16 +31,29 @@ public class LobbyPlayerCard : MonoBehaviour
         if (texture != null)
         {
             avatarImage.sprite = Sprite.Create(
-                texture,
-                new Rect(0, 0, texture.width, texture.height),
+                FlipTextureVertically(texture),
+                new Rect(0, 0, texture.height, texture.width),
                 new Vector2(0.5f, 0.5f),
                 100f,
                 0,
                 SpriteMeshType.Tight,
                 Vector4.zero,
-                false // <-- 'false' here flips the y-axis UV
+                true // <-- 'false' here flips the y-axis UV
             );
         }
 
+    }
+
+    Texture2D FlipTextureVertically(Texture2D original)
+    {
+        Texture2D flipped = new Texture2D(original.width, original.height, original.format, false);
+
+        for (int y = 0; y < original.height; y++)
+        {
+            flipped.SetPixels(0, y, original.width, 1, original.GetPixels(0, original.height - 1 - y, original.width, 1));
+        }
+
+        flipped.Apply();
+        return flipped;
     }
 }
