@@ -135,7 +135,10 @@ public class SteamManager : MonoBehaviour
             if (lobby.Id == ID)
             {
                 await lobby.Join();
-                return;
+            }
+            else
+            {
+                Debug.Log("Joining failed");
             }
         }
     }
