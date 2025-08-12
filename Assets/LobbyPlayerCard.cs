@@ -9,6 +9,18 @@ public class LobbyPlayerCard : MonoBehaviour
     public TextMeshProUGUI nameText;
     public Image avatarImage; // Drag in a UI Image from the prefab
 
+    ulong playerID;
+
+    public void SetPlayerID(ulong id)
+    {
+        playerID = id;
+    }
+
+    public ulong GetPlayerID()
+    {
+        return playerID;
+    }
+
     public void UpdateName(string playerName)
     {
         nameText.text = playerName;

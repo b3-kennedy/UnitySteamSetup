@@ -31,12 +31,23 @@ public class SteamManager : MonoBehaviour
     {
         SteamMatchmaking.OnLobbyCreated += LobbyCreated;
         SteamMatchmaking.OnLobbyEntered += LobbyEntered;
+        SteamMatchmaking.OnLobbyMemberLeave += LobbyLeft;
         SteamFriends.OnGameLobbyJoinRequested += GameLobbyJoinRequested;
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
 
     }
 
-
+    private void LobbyLeft(Lobby lobby, Friend friend)
+    {
+        for (int i = 0; i < playerLobbyParent.childCount; i++)
+        {
+            LobbyPlayerCard lobbyPlayerCard = playerLobbyParent.GetChild(i).GetComponent<LobbyPlayerCard>();
+            if (friend.Id == lobbyPlayerCard.GetPlayerID())
+            {
+                Destroy(playerLobbyParent.GetChild(i).gameObject);
+            }
+        }
+    }
 
     void OnDisable()
     {
@@ -75,7 +86,7 @@ public class SteamManager : MonoBehaviour
     {
         GameObject spawnedPlayerCard = Instantiate(playerCardPrefab, playerLobbyParent);
         LobbyPlayerCard lobbyPlayerCard = spawnedPlayerCard.GetComponent<LobbyPlayerCard>();
-
+        lobbyPlayerCard.SetPlayerID(friend.Id);
         // Set name
         lobbyPlayerCard.UpdateName(friend.Name);
 
@@ -127,5 +138,12 @@ public class SteamManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void LeaveLobby()
+    {
+        LobbyHolder.Instance.currentLobby.Leave();
+        lobbyUI.SetActive(false);
+        mainMenuUI.SetActive(true);
     }
 }
