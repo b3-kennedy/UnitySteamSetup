@@ -138,7 +138,8 @@ public class SteamManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Joining failed");
+                Debug.Log(lobby.Id);
+                Debug.Log(ID);
             }
         }
     }
