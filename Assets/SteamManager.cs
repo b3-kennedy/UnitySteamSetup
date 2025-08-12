@@ -145,5 +145,9 @@ public class SteamManager : MonoBehaviour
         LobbyHolder.Instance.currentLobby.Leave();
         lobbyUI.SetActive(false);
         mainMenuUI.SetActive(true);
+        for (int i = 0; i < playerLobbyParent.childCount; i++)
+        {
+            Destroy(playerLobbyParent.GetChild(i).gameObject);
+        }
     }
 }
