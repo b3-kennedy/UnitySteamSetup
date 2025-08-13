@@ -3352,8 +3352,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2109121084}
-  - component: {fileID: 2109121083}
   - component: {fileID: 2109121085}
+  - component: {fileID: 2109121083}
   m_Layer: 0
   m_Name: SteamManager
   m_TagString: Untagged
@@ -3378,7 +3378,7 @@ MonoBehaviour:
   lobbyIDText: {fileID: 237407377}
   lobbyUI: {fileID: 865809550}
   mainMenuUI: {fileID: 854621740}
-  startGameButton: {fileID: 0}
+  startGameButton: {fileID: 2090545801}
   playerCardPrefab: {fileID: 7149310824740424313, guid: 49e7d1e13e0ccd4499609970ff783f49, type: 3}
   playerLobbyParent: {fileID: 1555767230}
 --- !u!4 &2109121084
