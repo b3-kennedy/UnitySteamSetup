@@ -57,6 +57,11 @@ namespace Netcode.Transports.Facepunch
             }
         }
 
+        public uint GetAppID()
+        {
+            return steamAppId;
+        }
+
         private void Update()
         {
             SteamClient.RunCallbacks();

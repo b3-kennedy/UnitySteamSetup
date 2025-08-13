@@ -2,11 +2,11 @@ using UnityEngine;
 using Steamworks;
 using Steamworks.Data;
 using TMPro;
-using System;
-using System.Threading.Tasks;
 using UnityEngine.UI;
+using Netcode.Transports.Facepunch;
+using Unity.Netcode;
 
-public class SteamManager : MonoBehaviour
+public class SteamManager : NetworkBehaviour
 {
 
     public TMP_InputField input;
@@ -14,6 +14,8 @@ public class SteamManager : MonoBehaviour
     public TextMeshProUGUI lobbyIDText;
     public GameObject lobbyUI;
     public GameObject mainMenuUI;
+
+    public GameObject startGameButton;
 
     public GameObject playerCardPrefab;
     public Transform playerLobbyParent;
@@ -80,6 +82,11 @@ public class SteamManager : MonoBehaviour
             Debug.Log(member.Id);
             AddPlayerCard(member);
         }
+
+        if (NetworkManager.Singleton.IsHost) return;
+
+        NetworkManager.Singleton.GetComponent<FacepunchTransport>().targetSteamId = lobby.Owner.Id;
+        NetworkManager.Singleton.StartClient();
     }
 
     private async void AddPlayerCard(Friend friend)
@@ -107,6 +114,8 @@ public class SteamManager : MonoBehaviour
         {
             lobby.SetPublic();
             lobby.SetJoinable(true);
+            NetworkManager.Singleton.StartHost();
+            startGameButton.SetActive(true);
         }
     }
 
@@ -144,6 +153,28 @@ public class SteamManager : MonoBehaviour
         }
     }
 
+    public void Invite()
+    {
+        FacepunchTransport transport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
+        var appID = transport.GetAppID();
+
+        if (appID == 480)
+        {
+            SteamFriends.OpenOverlay("friends");
+        }
+        else
+        {
+            SteamFriends.OpenGameInviteOverlay(lobbyID);
+        }
+    }
+
+    public void StartGame()
+    {
+        if (!NetworkManager.Singleton.IsHost) return;
+
+        NetworkManager.Singleton.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
     public void LeaveLobby()
     {
         LobbyHolder.Instance.currentLobby.Leave();
@@ -153,5 +184,9 @@ public class SteamManager : MonoBehaviour
         {
             Destroy(playerLobbyParent.GetChild(i).gameObject);
         }
+
+        NetworkManager.Singleton.Shutdown();
+
+
     }
 }
